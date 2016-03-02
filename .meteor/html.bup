@@ -1,0 +1,84 @@
+<head>
+  <title>Test Chat Application</title>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>Test chat application</h1>
+	</header>
+	{{# if currentUser}}
+	  {{> chat_template}}
+	{{else}}
+	  {{> welcome_template}}
+	{{/if}}
+  </div>
+</body>
+
+
+<!--шаблоны-->
+<!--страница-привествие-->
+<template name="welcome_template">
+  <span><b>Welcome to test chat application<br />Please, {{> loginButtons}} to chat</b></span>
+</template>
+
+<!--чат-->
+<template name="chat_template">
+  {{> loginButtons}}
+  <table border="1" width="100%" cellspacing="5" cellpadding="5">
+	  <tr>
+	    <td width="70%">
+		  <form class="new_message_form">
+		    <input type="text" name="new_message_input" placeholder="Type your message here" />
+			<button>Send message</button>
+		  </form>
+		</td>
+		<td>
+		  <span>LOGGED IN USERS</span>
+		  <input type="checkbox" name="show_all_users_checkbox" /><span>show all users</span>
+		</td>
+	  </tr>
+	  <tr>
+	    <td width="70%" height="30%">
+		  <!--div style="width: 70%; height: 30%; overflow: auto"-->	<!--выяснить, почему не работает-->
+		  <ul style="list-style-type:none">
+		    {{#each chatMessages}}
+              {{> chat_message_template}}
+            {{/each}}
+          </ul>
+		  <!--/div-->
+		</td>
+		<td>
+		  <ul style="list-style-type:none">
+			{{#each loggedOnUsers}}
+			  {{> logged_on_user_template}}
+			{{/each}}
+		  </ul>
+		</td>
+	  </tr>
+	</table>
+	<span><b>Total messages count: {{totalMessagesCount}}</b></span>
+</template>
+
+<!--сообщение чата-->
+<template name="chat_message_template">
+  <li>
+    <!--{{#if isAdmin}}-->
+	  <button class="delete_message_button">delete</button>
+	<!--{{{/if}}-->
+	{{#unless isMessageOwner}}
+	  <button class="decrease_message_karma_button">-</button>
+	  <button class="increase_message_karma_button">+</button>
+	{{/unless}}
+    <span class="message_text"><strong>{{authorUsername}}:</strong> {{text}} : {{karma}}</span>
+  </li>
+</template>
+
+
+<template name="logged_on_user_template">
+  <li>
+	<!--button class="decrease_user_karma_button">-</button-->
+	<!--button class="increase_user_karma_button">+</button-->
+	<span>{{username}} : {{profile.karma}}</span>
+  </li>
+</template>

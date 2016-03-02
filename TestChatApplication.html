@@ -1,0 +1,67 @@
+<head>
+    <title>Test Chat App</title>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1 style="text-align: center; vertical-align: middle;">Test chat app</h1>
+			{{# if currentUser}}
+				<span>Logged in as {{> loginButtons}}</span>
+			{{else}}
+				{{> welcome_template}}
+			{{/if}}
+        </header>
+        {{# if currentUser}}
+            {{> chat_template}}
+        {{/if}}
+    </div>
+</body>
+
+
+<!--шаблоны-->
+<template name="welcome_template">
+    <span><b>Welcome to test chat application<br />Please, {{> loginButtons}} to chat</b></span>
+</template>
+
+<template name="chat_template">
+    <div class="message_block">
+		<ul class="messages_ul">
+			{{#each chatMessages}}
+				{{> chat_message_template}}
+			{{/each}}
+        </ul>
+    </div>
+	<div class="users_list">
+        <span><strong>Chat users:</strong></span>
+        <ul>
+            {{# each chatUsers}}
+                {{> user_list_template}}
+            {{/each}}
+        </ul>
+     </div>
+    <form class="new_message_form">
+        <span><input type="text" name="new_message_input" placeholder="Type your message here" /></span>
+        <button>Send message</button>
+    </form>
+	<!--span><b>Total messages count: {{totalMessagesCount}}</b></span-->
+</template>
+
+
+<template name="chat_message_template">
+    <li>
+        <!--button class="delete_message_button">delete</button-->
+        <span class="message_text"><strong>{{authorUsername}}:</strong> {{text}} : {{karma}}</span>
+		{{#unless isMessageOwner}}
+            <button class="decrease_message_karma_button">-</button>
+            <button class="increase_message_karma_button">+</button>
+        {{/unless}}
+    </li>
+</template>
+
+
+<template name="user_list_template">
+    <li>
+        <span>{{username}} : {{profile.karma}}</span>
+    </li>
+</template>
